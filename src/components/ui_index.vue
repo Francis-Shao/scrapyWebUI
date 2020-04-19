@@ -2,10 +2,10 @@
     <div style="height: 100%;">
         <el-container style="height: 100%">
             <el-aside id="asideBar" width="14%">
-          <span id="asideTitle">
-            Web UI
-          </span>
-                <el-menu text-color="#d2d1cd" v-bind:router="true"  id="menu" default-active="introduction" active-text-color="#f8f9fc" >
+                <span id="asideTitle">
+                Web UI
+                </span>
+                <el-menu text-color="#d2d1cd" v-bind:router="true"  id="menu" default-active="introduction" active-text-color="black" >
                     <el-menu-item index="introduction">
                         <i class="el-icon-menu"></i>
                         <span>简介</span>
@@ -28,26 +28,15 @@
                     </el-menu-item>
                 </el-menu>
             </el-aside>
-            <el-container>
-                <el-header id="rightHeader" height="50px">
-                    <el-row :gutter="60">
-                        <el-col :span="2" :offset="20">
-                            <el-button type="text" style="color: aliceblue;font-size: 15px" @click="loginClick" v-show="loginButton">登录</el-button>
-                            <span v-show="loginName" style="font-size: 15px">{{ nickName }}</span>
-                        </el-col>
-                        <el-col :span="1" >
-                            <el-button type="text" style="color: aliceblue; font-size: 15px" @click="exitLogin" v-show="exitVisible">退出</el-button>
-                        </el-col>
-                    </el-row>
-                </el-header>
-                <el-main>
-                    <div id="controller">
-                        <keep-alive>
-                            <router-view />
-                        </keep-alive>
-                    </div>
-                </el-main>
-            </el-container>
+            <el-main id="indexMain">
+                <el-container>
+                    <el-header id="rightHeader" height="50px">
+                    </el-header>
+                    <el-main>
+                        <router-view></router-view>
+                    </el-main>
+                </el-container>
+            </el-main>
         </el-container>
     </div>
 </template>
@@ -73,11 +62,10 @@
     #asideBar{
         background-color: #4e73df;
         height: 100%;
-        float: left;
+
     }
 
     #menu{
-        background-size: cover;
         height: 100%;
     }
 
@@ -92,8 +80,12 @@
 
     #rightHeader{
         background-color: #37ADF0;
-        background-color: #d2d1cd;
+
         line-height: 50px;
+    }
+
+    #indexMain{
+
     }
 
     .el-menu-item{
