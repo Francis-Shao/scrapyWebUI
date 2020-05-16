@@ -22,10 +22,6 @@
                         <i class="el-icon-menu"></i>
                         <span slot="title">词云生成</span>
                     </el-menu-item>
-                    <el-menu-item index="editor">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">编辑调试</span>
-                    </el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main id="indexMain">
