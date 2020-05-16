@@ -3,7 +3,7 @@
         <el-container>
             <el-header>
                 <el-row>
-                    <el-col offset="6" span="10">
+                    <el-col offset="7" span="7">
                         <el-select v-model="value" placeholder="请选择网址">
                             <el-option
                                     v-for="item in options"
@@ -15,23 +15,22 @@
                             </el-option>
                         </el-select>
                     </el-col>
-                    <el-col offset="2" span="4">
-                        <el-button @click="select_address">确定</el-button>
+                    <el-col offset="0" span="1">
+                        <el-button @click="select_address">生成词云</el-button>
                     </el-col>
                 </el-row>
             </el-header>
             <el-main>
-                <el-image
-                    style="width: 1000px; height: 1000px"
-                    :src="url" fit="contain">
-                </el-image>
+                <img v-if="lay_type==1" src="../../static/豆瓣515.png" height="1000" width="1000" alt />
+                <img v-if="lay_type==2" src="../../static/知乎515.png" height="1000" width="1000" alt />
+                <img v-if="lay_type==3" src="../../static/CSDN515.png" height="1000" width="1000" alt />
             </el-main>
         </el-container>
     </div>
 </template>
 
 <script>
-    import testImg from "../../static/1_5.jpg"
+    //import img_1 from "../../static/豆瓣515.png"
     export default {
         name: "wordCloud",
         data(){
@@ -39,37 +38,30 @@
                 options:[
                     {
                         "value":1,
-                        "name":"douban",
-                        "address":"http:121.121.121.111"
+                        "name":"豆瓣电影",
+                        "address":"https://movie.douban.com/"
                     },
                     {
                         "value":2,
-                        "name":"ali",
-                        "address":"http:121.121.121.111"
+                        "name":"知乎热榜",
+                        "address":"https://www.zhihu.com/hot"
                     },
                     {
                         "value":3,
-                        "name":"tencent",
-                        "address":"http:121.121.121.111"
-                    },
-                    {
-                        "value":4,
-                        "name":"baidu",
-                        "address":"http:121.121.121.111"
-                    },
-                    {
-                        "value":5,
-                        "name":"netease",
-                        "address":"http:121.121.121.111"
+                        "name":"CSDN首页",
+                        "address":"https://www.csdn.net/"
                     }
                 ],
                 value:"",
-                url:testImg
+                //url:img_1,
+                lay_type:0,
             }
         },
         methods:{
             select_address(){
-                this.$message.success("当前value: "+this.value)
+                if(this.value==1){this.lay_type=1}
+                if(this.value==2){this.lay_type=2}
+                if(this.value==3){this.lay_type=3}
             }
         }
     }

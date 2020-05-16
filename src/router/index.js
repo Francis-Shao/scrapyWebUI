@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import ui_index from "@/components/ui_index";
 import introduction from "@/components/introduction";
 import manageSpider from "@/components/manageSpider";
-import editor from "@/components/editor";
 import autoMake from "@/components/autoMake";
 import wordCloud from "@/components/wordCloud";
 
@@ -39,11 +38,6 @@ const routes=[
                 name:"wordCloud",
                 component: wordCloud
             },
-            {
-                path: "editor",
-                name: "editor",
-                component: editor
-            }
         ]
     }
 ]

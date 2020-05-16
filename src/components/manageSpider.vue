@@ -6,10 +6,10 @@
                     <el-menu-item @click="selectVisible" >
                         选择脚本
                     </el-menu-item>
-                    <el-menu-item>
+                    <el-menu-item @click="run_spider">
                         运行
                     </el-menu-item>
-                    <el-menu-item>
+                    <el-menu-item @click="cancel_spider">
                         停止
                     </el-menu-item>
                     <el-menu-item @click="getSpiderOutput">
@@ -18,8 +18,8 @@
                     <el-menu-item @click="deleteSpider">
                         删除
                     </el-menu-item>
-                    <el-menu-item>
-                        数据库设置
+                    <el-menu-item @click="getProjectList">
+                        刷新
                     </el-menu-item>
                 </el-menu>
             </el-header>
@@ -27,16 +27,11 @@
                 <el-table :data="pyFileList" stripe highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column type="index" label="编号" width="100"></el-table-column>
                     <el-table-column label="脚本" prop="name" width="250"></el-table-column>
-                    <el-table-column label="最后运行" prop="time" width="120"></el-table-column>
-                    <el-table-column label="状态" width="120" prop="condition"></el-table-column>
-                    <el-table-column label="操作">
-                        <template >
-                            <el-button size="mini">待定</el-button>
-                        </template>
-                    </el-table-column>
+                    <el-table-column label="最后运行" prop="time" width="250"></el-table-column>
+                    <el-table-column label="状态" prop="state"></el-table-column>
                 </el-table>
             </el-main>
-            <el-dialog title="选择脚本" :visible.sync="spiderSelect" @close="getSpiderList" width="50%">
+            <el-dialog title="选择脚本" :visible.sync="spiderSelect" @close="getProjectList" width="50%">
                 <el-container>
                     <el-header style="width: 56%;margin-left: 22%">
                         <el-input v-model="project_name" placeholder="项目名" clearable></el-input>
@@ -70,13 +65,13 @@
                     </el-row>
                 </el-header>
                 <el-main>
-                    <el-card>
-                        {{ outputContent }}
-                    </el-card>
+                    <el-input type="textarea" :disabled="true" v-model="outputContent" autosize>
+
+                    </el-input>
                 </el-main>
             </el-dialog>
         </el-container>
-        <el-button @click="test">调试函数</el-button>
+<!--        <el-button @click="test">调试函数</el-button>-->
     </div>
 </template>
 
@@ -97,7 +92,9 @@
             }
         },
         mounted(){
-            this.getSpiderList()
+            this.getProjectList()
+            window.setInterval(this.getProjectList,1000*10)
+
         },
         methods:{
             selectVisible(){
@@ -111,7 +108,7 @@
                 }
                 formData.append("spider",this.spider_name)
                 formData.append("project",this.project_name)
-                this.$axios.post("http://127.0.0.1:5000/project/new",formData,
+                this.$axios.post("http://121.199.12.225:5000/project/new",formData,
                     {
                         headers:{
                             'Content-Type': 'multipart/form-data'
@@ -126,9 +123,9 @@
                     this.$refs.spiderUpload.uploadFiles=[]
                 })
             },
-            getSpiderList(){
+            getProjectList(){
                 this.pyFileList=[]
-                this.$axios.get("http://127.0.0.1:5000/project/all")
+                this.$axios.get("http://121.199.12.225:5000/project/all")
                 .then(response=>{
                     let spiderList=response.data
                     for( let i=0;i<spiderList.length;i++ ) {
@@ -143,9 +140,9 @@
                 }
                 else {
                     let name = this.currentRow.name
-                    this.$axios.get("http://127.0.0.1:5000/spider/output?name=" + name)
+                    this.$axios.get("http://121.199.12.225:5000/project/output?name=" + name)
                         .then(response => {
-                            let content = response.data
+                            let content = response.data.info
                             this.outputContent = content
                         })
                     this.currentSpider = this.currentRow.name
@@ -159,11 +156,11 @@
                 }
                 else{
                     let name=this.currentRow.name
-                    this.$axios.get("http://127.0.0.1:5000/project/delete?name="+name)
+                    this.$axios.get("http://121.199.12.225:5000/project/delete?name="+name)
                     .then(response=>{
                         let answer=response.data
                         if(answer.result==='success'){
-                            this.getSpiderList()
+                            this.getProjectList()
                         }
                         else{
                             this.$message.error(answer.info)
@@ -172,8 +169,46 @@
                 }
             },
 
+            run_spider(){
+                if (this.currentRow==null){
+                    this.$message.error("请选择脚本")
+                }
+                else{
+                    let name=this.currentRow.name
+                    this.$axios.get("http://121.199.12.225:5000/project/run?name="+name)
+                        .then(response=>{
+                            let answer=response.data
+                            if(answer.result==='success'){
+                                this.$message.success(answer.info)
+                            }
+                            else{
+                                this.$message.error(answer.info)
+                            }
+                        })
+                }
+            },
+
+            cancel_spider(){
+                if (this.currentRow==null){
+                    this.$message.error("请选择脚本")
+                }
+                else{
+                    let name=this.currentRow.name
+                    this.$axios.get("http://121.199.12.225:5000/project/cancel?name="+name)
+                        .then(response=>{
+                            let answer=response.data
+                            if(answer.result==='success'){
+                                this.$message.success(answer.info)
+                            }
+                            else{
+                                this.$message.error(answer.info)
+                            }
+                        })
+                }
+            },
+
             downloadOutput(){
-                window.location.href="http://127.0.0.1:5000/spider/output/download?name="+this.currentSpider
+                window.location.href="http://121.199.12.225:5000/project/output/download?name="+this.currentSpider
             },
 
             handleCurrentChange(val){
@@ -181,7 +216,10 @@
             },
 
             test(){
-                console.log(this.currentRow.name)
+                this.$axios.get("http://121.199.12.225:5000/")
+                .then(response=>{
+                    this.$message.success(response.data)
+                })
             }
         }
     }
