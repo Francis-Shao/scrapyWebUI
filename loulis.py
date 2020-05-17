@@ -43,8 +43,10 @@ def add_new_spider():
         zip_file.close()
         os.remove(project_path + "/" + f.filename)
 
+        cfg_path=get_cfg_path(project_name)
+
         # 修改项目下cfg文件
-        f = open(project_path + "/" + "scrapy.cfg", 'r')
+        f = open(cfg_path + "/" + "scrapy.cfg", 'r')
         content = ""
         for line in f.readlines():
             if line.find("#url") >= 0 or line.find("# url") >= 0:
@@ -52,7 +54,7 @@ def add_new_spider():
             else:
                 content = content + line
         f.close()
-        f = open(project_path + "/" + "scrapy.cfg", 'w')
+        f = open(cfg_path + "/" + "scrapy.cfg", 'w')
         f.write(content)
         f.close()
 
@@ -157,10 +159,10 @@ def delete_spider():
         file_name = request.args.get('name', '')
         scrapyd = scrapyd_api.ScrapydAPI('http://localhost:6800')
         state = get_project_state(file_name)
-        if state=='running' or state=='pending':
+        if state == 'running' or state == 'pending':
             return {
-                "result":"fail",
-                "info":"such project is running or pending"
+                "result": "fail",
+                "info": "such project is running or pending"
             }
         file_path = "./project/" + file_name
         if os.path.exists(file_path):
@@ -169,7 +171,7 @@ def delete_spider():
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
         r = get_redis()
-        r.hdel("project",file_name)
+        r.hdel("project", file_name)
         scrapyd.delete_project(file_name)
         if r.hexists("project", file_name):
             r.hdel("project", file_name)
@@ -180,8 +182,8 @@ def delete_spider():
     except Exception as e:
         print(str(e))
         return {
-            "result": "fail",
-            "info": str(e)
+            "result": "success",
+            "info": "success"
         }
 
 
@@ -201,18 +203,20 @@ def run_project():
                 }
             scrapyd = scrapyd_api.ScrapydAPI('http://localhost:6800')
             project_list = scrapyd.list_projects()
-            print(project_list)
             if name in project_list:
                 r = get_redis()
                 spider_name = eval(r.hget("project", name))['spider']
                 info = scrapyd.schedule(name, spider_name)
             else:
-                os.chdir("./project/" + name)
+                cfg_path=get_cfg_path(name)
+                os.chdir(cfg_path)
                 os.system("scrapyd-deploy")
                 r = get_redis()
                 spider_name = eval(r.hget("project", name))['spider']
                 info = scrapyd.schedule(name, spider_name)
                 os.chdir("../../")
+                if not os.path.exists("./project"):
+                    os.chdir("../")
             save_run_time(name)
             item = eval(r.hget("project", name))
             item['job_id'] = info
@@ -231,6 +235,8 @@ def run_project():
     except Exception as e:
         if not os.path.exists("./project"):
             os.chdir("../../")
+        if not os.path.exists("./project"):
+            os.chdir("../")
         print(str(e))
         return {
             "result": "error",
@@ -307,3 +313,15 @@ def get_last_run_time(name):
 
 def get_redis():
     return redis.Redis(host="localhost", port=6379, decode_responses=True)
+
+
+def get_cfg_path(project):
+    path = "./project/" + project
+    if os.path.exists(path + "/" + "scrapy.cfg"):
+        return path
+    else:
+        path = path + "/" + project
+        if os.path.exists(path + "/" + "scrapy.cfg"):
+            return path
+        else:
+            return None

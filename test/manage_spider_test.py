@@ -16,9 +16,9 @@ class hello_world_test(unittest.TestCase):
         app.testing = True
 
         self.client = app.test_client()
-        self.file = open("./DistributedSpider-master.zip", "rb")
+        self.file = open("../DistributedSpider-master.zip", "rb")
         self.scrapyd = scrapyd_api.ScrapydAPI('http://localhost:6800')
-        if "DistributedSpider" in self.scrapyd.list_projects():
+        if "DistributedSpiders" in self.scrapyd.list_projects():
             self.scrapyd.delete_project("DistributedSpiders")
         self.redis=redis.Redis(host="127.0.0.1", port=6379, decode_responses=True)
         os.makedirs("./project")
@@ -49,6 +49,7 @@ class hello_world_test(unittest.TestCase):
         self.assertEqual(result['result'],"success")
         response = self.client.get("/project/run?name=DistributedSpiders")
         result = get_dict(response.data)
+        print(result)
         self.assertEqual(result['info'], "such project is running or pending")
         response = self.client.get("/project/run?name=Distr")
         result = get_dict(response.data)

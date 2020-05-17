@@ -2,10 +2,11 @@ import database_manage
 import os
 import redis
 import scrapyd_api
+import zipfile
 
 if __name__ == '__main__':
-    pass
-    # # scrapyd=scrapyd_api.ScrapydAPI("http://121.199.12.225:6800")
-    # # scrapyd.list_projects()
-    r=redis.Redis(host="121.199.12.225", port=6379, decode_responses=True)
-    r.hgetall("project")
+    zip_file = zipfile.ZipFile("./t1.zip")
+    zip_list = zip_file.namelist()
+    for ff in zip_list:
+        print(ff)
+    zip_file.close()

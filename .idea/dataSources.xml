@@ -13,5 +13,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:D:\MyCode\MyPython\flask_web\test\.coverage</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="DistributedSpiders" uuid="d7990b01-37ca-45d0-afd4-17ba219c6211">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\MyCode\MyPython\flask_web\dbs\DistributedSpiders.db</jdbc-url>
+    </data-source>
   </component>
 </project>
