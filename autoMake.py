@@ -26,6 +26,8 @@ def scrapy_auto_make():#自动生成
         json_file_path = saveJson()
 
         url,scrapy_name,div_list,next_link,item,xpath,item_xpath = getForm(json_file_path)#获取表单数据
+        if scrapy_name == 'test':
+            return jsonify({'status':400,'message':'项目名不能是test'})
 
         subprocess.check_output(['scrapy', 'startproject', scrapy_name],cwd='./')
 
