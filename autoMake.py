@@ -26,6 +26,8 @@ def scrapy_auto_make():#自动生成
         json_file_path = saveJson()
 
         url,scrapy_name,div_list,next_link,item,xpath,item_xpath = getForm(json_file_path)#获取表单数据
+        if scrapy_name == 'test':
+            return jsonify({'status':400,'message':'项目名不能是test'})
 
         subprocess.check_output(['scrapy', 'startproject', scrapy_name],cwd='./')
 
@@ -33,15 +35,15 @@ def scrapy_auto_make():#自动生成
         modify_spider(scrapy_name,url,div_list,next_link,item,xpath,item_xpath)#修改spider
         performanceOptimization(json_file_path)  # 选择优化
 
-        zipFilePath = os.path.join(sys.path[0],scrapy_name+".zip")
+        zipFilePath = os.path.join('./',scrapy_name+".zip")
         zipFile = zipfile.ZipFile(zipFilePath,"w",zipfile.ZIP_DEFLATED)
         #absDir = os.path.join(sys.path[0],scrapy_name)
-        absDir = auto_make.root_path + "\\" + scrapy_name
+        absDir ="./" + scrapy_name
         writeAllFileToZip(absDir,zipFile)
         zipFile.close()
 
         shutil.rmtree(absDir)#删除项目
-        shutil.move(zipFilePath,auto_make.root_path+"\\scrapyproject_zips\\"+scrapy_name+".zip")
+        shutil.move(zipFilePath,"./scrapyproject_zips/"+scrapy_name+".zip")
 
         return 'success'
 
@@ -152,21 +154,23 @@ def writeAllFileToZip(absDir,zipFile):
     for f in os.listdir(absDir):
         absFile = os.path.join(absDir, f)  # 子文件的绝对路径
         if os.path.isdir(absFile):  # 判断是文件夹，继续深度读取。
-            relFile = absFile[len(os.getcwd()) + 1:]  # 改成相对路径，否则解压zip是/User/xxx开头的文件。
-            zipFile.write(relFile)  # 在zip文件中创建文件夹
+            #relFile = absFile[len(os.getcwd()) + 1:]  # 改成相对路径，否则解压zip是/User/xxx开头的文件。
+            zipFile.write(absFile)  # 在zip文件中创建文件夹
             writeAllFileToZip(absFile, zipFile)  # 递归操作
         else:  # 判断是普通文件，直接写到zip文件中。
-            relFile = absFile[len(os.getcwd()) + 1:]  # 改成相对路径
-            zipFile.write(relFile)
+            #relFile = absFile[len(os.getcwd()) + 1:]  # 改成相对路径
+            zipFile.write(absFile)
     return
 
 @auto_make.route('/download',methods=['GET'])
 def download_scrapy():
     file_name = request.args.get('projectName', '')
-    res = make_response(send_from_directory(r"./scrapyproject_zips",filename=file_name,as_attachment=True))
+    res = make_response(send_from_directory(r"C:/flask/scrapyproject_zips", filename=file_name, as_attachment=True))
     res.headers["Cache-Control"] = "no_store"
     res.headers["max-age"] = 0
     return res
+
+
 
 
 
