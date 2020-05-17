@@ -1,7 +1,6 @@
 <template>
     <el-container>
-        <el-header>
-            <el-button type="primary" @click="dialogFormVisible = true">自动生成脚本</el-button>
+        <el-header height="0px">
             <el-dialog title="自动生成脚本" :visible.sync="dialogFormVisible">
                 <el-form :model="form" :rules="rules" ref="form" :label-position="labelPosition" label-width="110px"  @submit.native.prevent>
                     <el-form-item label="项目名:" prop="projectName">
@@ -95,6 +94,7 @@
                 </el-table-column>
             </el-table>
         </el-main>
+        <el-button type="primary" @click="dialogFormVisible = true" style="width: 150px;margin: 0 auto">创建新脚本</el-button>
     </el-container>
 </template>
 
