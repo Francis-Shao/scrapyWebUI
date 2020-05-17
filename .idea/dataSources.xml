@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:D:\MyCode\MyPython\flask_web\dbs\DistributedSpider.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="" uuid="8cf7b55f-b451-4509-825f-37e8f945d7da">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\MyCode\MyPython\flask_web\test\.coverage</jdbc-url>
+    </data-source>
   </component>
 </project>

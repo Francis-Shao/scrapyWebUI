@@ -12,17 +12,6 @@ import scrapyd_api
 manage_spider = Blueprint('manage_spider', __name__)
 
 
-
-@manage_spider.route('/')
-def hello_world():
-    return "hello world"
-
-
-@manage_spider.route('/message', methods=['GET'])
-def get_message():
-    return "afterClick"
-
-
 # 上传项目保存
 @manage_spider.route('/project/new', methods=['POST'])
 def add_new_spider():
