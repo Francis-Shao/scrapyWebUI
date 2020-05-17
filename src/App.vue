@@ -29,4 +29,10 @@ export default {
     margin-left: -10px;
     margin-right: -10px;
 }
+    html{
+        height: 100%;
+    }
+    body{
+        height: 100%;
+    }
 </style>
