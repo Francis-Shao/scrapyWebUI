@@ -36,12 +36,12 @@ def scrapy_auto_make():#自动生成
         zipFilePath = os.path.join(sys.path[0],scrapy_name+".zip")
         zipFile = zipfile.ZipFile(zipFilePath,"w",zipfile.ZIP_DEFLATED)
         #absDir = os.path.join(sys.path[0],scrapy_name)
-        absDir = auto_make.root_path + "\\" + scrapy_name
+        absDir = auto_make.root_path + "/" + scrapy_name
         writeAllFileToZip(absDir,zipFile)
         zipFile.close()
 
         shutil.rmtree(absDir)#删除项目
-        shutil.move(zipFilePath,auto_make.root_path+"\\scrapyproject_zips\\"+scrapy_name+".zip")
+        shutil.move(zipFilePath,auto_make.root_path+"/scrapyproject_zips/"+scrapy_name+".zip")
 
         return 'success'
 
