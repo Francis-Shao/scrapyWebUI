@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['run.py'],
-             pathex=['D:\\MyCode\\MyPython\\flask_web'],
+             pathex=['D:\\wlp\\Workspaces\\flask\\test\\scrapyWebUI'],
              binaries=[],
              datas=[],
              hiddenimports=[],
