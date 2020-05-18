@@ -87,6 +87,8 @@
             <el-table :data="zipFileList" stripe highlight-current-row @current-change="handlCurrentChange">
                 <el-table-column type="index" label="编号" width="100"></el-table-column>
                 <el-table-column label="脚本" prop="name" width="250"></el-table-column>
+				<el-table-column label="项目名" prop="projectname" width="250"></el-table-column>
+                <el-table-column label="脚本名" prop="spidername" width="250"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button @click="handleDownload(scope.$index)" type="text" size="small">下载</el-button>
@@ -184,6 +186,10 @@
                     .then(response=>{
                         let spiderList=response.data
                         for( let i=0;i<spiderList.length;i++ ) {
+							let str = spiderList[i].name
+							str = str.split('.zip')[0]
+							spiderList[i].projectname = str
+							spiderList[i].spidername = 'template_spider' 
                             this.zipFileList.push(spiderList[i])
                         }
                     })

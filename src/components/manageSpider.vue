@@ -46,7 +46,11 @@
                         </el-upload>
                     </el-main>
                     <el-footer>
-                        <el-button @click="uploadFile">上传文件</el-button>
+                        <el-popconfirm title="是否确保项目名与脚本名与项目代码设置一致
+                        本站生成的脚本脚本名为template_sipder,项目名为文件名"
+                            @onConfirm="uploadFile">
+                            <el-button slot="reference">上传文件</el-button>
+                        </el-popconfirm>
                     </el-footer>
                 </el-container>
             </el-dialog>
@@ -93,7 +97,7 @@
         },
         mounted(){
             this.getProjectList()
-            window.setInterval(this.getProjectList,1000*10)
+            window.setInterval(this.getProjectList,1000*60)
 
         },
         methods:{
@@ -124,9 +128,9 @@
                 })
             },
             getProjectList(){
-                this.pyFileList=[]
                 this.$axios.get("http://121.199.12.225:5000/project/all")
                 .then(response=>{
+                    this.pyFileList=[]
                     let spiderList=response.data
                     for( let i=0;i<spiderList.length;i++ ) {
                         this.pyFileList.push(spiderList[i])
@@ -164,6 +168,7 @@
                         }
                         else{
                             this.$message.error(answer.info)
+                            this.getProjectList()
                         }
                     })
                 }
