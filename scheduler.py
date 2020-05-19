@@ -11,8 +11,7 @@ def performanceOptimization(jsonFilePath):
     middlewareFilePath = "./" + opt.optionData['projectName'] + "/" + opt.optionData['projectName'] + "/middlewares.py"
     cfgFilePath = "./" + opt.optionData['projectName'] + "/" + "scrapy.cfg"
 
-    if opt.optionData['robot'] == True:
-        opt.robotHandler(opt, settingFilePath)
+    opt.robotHandler(opt, settingFilePath)
     opt.cookieHandler(opt, settingFilePath)
     if (opt.optionData['userAgent'] == True) and (opt.optionData['ipPool'] == True):
         opt.userAgentandIpPoolHandler(opt, settingFilePath, middlewareFilePath)
