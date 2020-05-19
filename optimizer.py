@@ -46,7 +46,7 @@ class optimizer:
 
         settingCodeStr = "\nRETRY_TIMES = %d\n" \
                          "RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]\n" \
-                         "PROXY_LIST = 'ips.txt'\n" \
+                         "PROXY_LIST = 'C:\iplist\iplist\ips.txt'\n" \
                          "PROXY_MODE = 0\n" % self.optionData['delay']
 
         with open(path, 'a') as fp:
