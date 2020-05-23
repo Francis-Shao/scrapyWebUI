@@ -5,7 +5,7 @@
             <ul>
                 <li><p><span>主要功能为运行Scrapy项目</span></p></li>
                 <li><p><span>需要Scrapy项目打包的zip压缩包，项目名和需要运行的脚本名</span></p></li>
-                <li><p><span>项目名请按照settings的项目填写，否则容易出现未知错误</span></p></li>
+                <li><p><span>项目名请按照scrapy.cfg内的项目名填写，否则项目会运行失败</span></p></li>
                 <li><p><span>项目运行之后可以查看和下载项目的log输出</span></p></li>
                 <li><p><span>可以选择在项目运行过程中停止项目</span></p></li>
                 <li><p><span>项目停止阶段可以删除项目</span></p></li>
