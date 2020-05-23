@@ -19,6 +19,16 @@ def add_new_spider():
         # 读取数据保存上传数据
         spider_name = request.form.get("spider")
         project_name = request.form.get("project")
+        if spider_name == "" or spider_name is None:
+            return {
+                "result": "fail",
+                "info": "need spider name"
+            }
+        if project_name == "" or project_name is None:
+            return {
+                "result": "fail",
+                "info": "need project name"
+            }
         if os.path.exists("./project/" + project_name):
             return {
                 "result": "fail",
@@ -193,6 +203,11 @@ def run_project():
     try:
         r = get_redis()
         name = request.args.get('name', '')
+        if name=="":
+            return {
+                "result":"error",
+                "info":"need project information"
+            }
         if os.path.exists("./project/" + name):
             info = ""
             state = get_project_state(name)
@@ -217,6 +232,7 @@ def run_project():
                 os.chdir("../../")
                 if not os.path.exists("./project"):
                     os.chdir("../")
+            print(info)
             if info['jobid'] is not None:
                 item = eval(r.hget("project", name))
                 item['job_id'] = info['jobid']
