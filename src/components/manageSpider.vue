@@ -105,27 +105,34 @@
                 this.spiderSelect=true
             },
             uploadFile(){
-                let formData=new FormData
-                let file_list=this.$refs.spiderUpload.uploadFiles
-                for( let i=0; i<file_list.length;i++  ){
-                    formData.append("file",file_list[i].raw)
-                }
-                formData.append("spider",this.spider_name)
-                formData.append("project",this.project_name)
-                this.$axios.post("http://121.199.12.225:5000/project/new",formData,
-                    {
-                        headers:{
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }).then(response=>{
-                    if (response.data.result==="success"){
-                        this.$message.success("上传项目成功")
-                    }
-                    else{
-                        this.$message.error(response.data.info)
-                    }
+                if (this.spider_name===""||this.project_name===""||(this.$refs.spiderUpload.uploadFiles).length!==1){
+                    this.$message.error("请正确填写必要数据")
+                    this.spider_name=""
+                    this.project_name=""
                     this.$refs.spiderUpload.uploadFiles=[]
-                })
+                }
+                else {
+                    let formData = new FormData
+                    let file_list = this.$refs.spiderUpload.uploadFiles
+                    for (let i = 0; i < file_list.length; i++) {
+                        formData.append("file", file_list[i].raw)
+                    }
+                    formData.append("spider", this.spider_name)
+                    formData.append("project", this.project_name)
+                    this.$axios.post("http://121.199.12.225:5000/project/new", formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }).then(response => {
+                        if (response.data.result === "success") {
+                            this.$message.success("上传项目成功")
+                        } else {
+                            this.$message.error(response.data.info)
+                        }
+                        this.$refs.spiderUpload.uploadFiles = []
+                    })
+                }
             },
             getProjectList(){
                 this.$axios.get("http://121.199.12.225:5000/project/all")
