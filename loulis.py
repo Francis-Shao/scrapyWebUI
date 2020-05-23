@@ -217,15 +217,20 @@ def run_project():
                 os.chdir("../../")
                 if not os.path.exists("./project"):
                     os.chdir("../")
-            save_run_time(name)
-            item = eval(r.hget("project", name))
-            item['job_id'] = info
-            r.hset("project", name, str(item))
-            save_run_time(name)
-            return {
-                "result": 'success',
-                "info": "项目成功运行"
-            }
+            if info['jobid'] is not None:
+                item = eval(r.hget("project", name))
+                item['job_id'] = info['jobid']
+                r.hset("project", name, str(item))
+                save_run_time(name)
+                return {
+                    "result": 'success',
+                    "info": "项目成功运行"
+                }
+            else:
+                return {
+                    "result":"fail",
+                    "info":"项目执行失败 "+info['message']
+                }
 
         else:
             return {
