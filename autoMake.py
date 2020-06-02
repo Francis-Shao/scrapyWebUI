@@ -170,6 +170,13 @@ def download_scrapy():
     res.headers["max-age"] = 0
     return res
 
+@auto_make.route('/delete',methods=['POST'])
+def delete_scrapy():
+    file_name = request.args.get('projectName', '')
+    file_path = r"./scrapyproject_zips/" + file_name
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+    return 'success'
 
 
 
