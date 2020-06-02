@@ -265,6 +265,11 @@
 
             },
 			handleDelete(index,zipFileList){
+				this.$axios.post("http://121.199.12.225:5000/delete?projectName="+zipFileList[index].name)
+                .then(response => {
+                    if(response.data=='success')
+                    this.$message.success("删除成功")
+                })
                 zipFileList.splice(index,1)
             },
             Inputdelay(){
