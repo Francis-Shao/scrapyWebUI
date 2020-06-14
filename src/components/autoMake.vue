@@ -70,7 +70,7 @@
                             <el-checkbox v-model="form.ipPool" label="ipPool" @change="Inputdelay" border></el-checkbox>
                         </el-form-item>
                         <el-form-item label="delay" prop="delay" :required="ishaveto">
-                            <el-input type="number" v-model.number="form.delay" placeholder="请输入延时时长" :disabled="disabled"></el-input>
+                            <el-input v-model="form.delay" placeholder="请输入延时时长" :disabled="disabled"></el-input>
                         </el-form-item>
 
                     </div>
@@ -92,6 +92,8 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button @click="handleDownload(scope.$index)" type="text" size="small">下载</el-button>
+						<el-button @click="handleDelete(scope.$index,zipFileList)" type="text" size="small">删除</el-button>
+
                     </template>
                 </el-table-column>
             </el-table>
@@ -104,6 +106,16 @@
     export default {
         name: "autoMake",
         data(){
+			const blurText = async(rule,value)=>{
+                if(this.ishaveto){
+                    const boolean = new RegExp('^[1-9][0-9]*$').test(value)
+                    if(!boolean){
+                        this.$message.warning('请输入正整数')
+                        this.form.delay=''
+                    }
+                }
+               
+            }
             return{
                 labelPosition: "right",
                 dialogFormVisible: false,
@@ -157,6 +169,9 @@
                     ],
                     xpath:[
                         {required: true, message: 'xpath不能为空', trigger: 'blur'}
+                    ],
+					delay:[
+                        {validator:blurText,trigger:'blur'}
                     ]
 
                 },
@@ -248,6 +263,14 @@
 
                 window.location.href = "http://121.199.12.225:5000/download?projectName="+zipFileList[index].name+"&time="+new Date().getTime()
 
+            },
+			handleDelete(index,zipFileList){
+				this.$axios.post("http://121.199.12.225:5000/delete?projectName="+zipFileList[index].name)
+                .then(response => {
+                    if(response.data=='success')
+                    this.$message.success("删除成功")
+                })
+                zipFileList.splice(index,1)
             },
             Inputdelay(){
                 if(this.form.ipPool){
