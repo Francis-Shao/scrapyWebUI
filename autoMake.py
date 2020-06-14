@@ -80,7 +80,7 @@ def getForm(json_file_path):
 
 def saveJson():
     data = json.loads(request.get_data(as_text=True))
-    jsonFilePath = 'option.json'
+    jsonFilePath = 'C:/flask/option.json'
     with open(jsonFilePath, 'w') as file_obj:
         json.dump(data, file_obj)
     return jsonFilePath
@@ -170,6 +170,13 @@ def download_scrapy():
     res.headers["max-age"] = 0
     return res
 
+@auto_make.route('/delete',methods=['POST'])
+def delete_scrapy():
+    file_name = request.args.get('projectName', '')
+    file_path = r"./scrapyproject_zips/" + file_name
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+    return 'success'
 
 
 

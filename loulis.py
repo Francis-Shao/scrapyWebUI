@@ -29,17 +29,18 @@ def add_new_spider():
                 "result": "fail",
                 "info": "need project name"
             }
+        f = request.files["file"]
+        if f is None or f.filename.find(".zip") < 0:
+            return {
+                "result": "fail",
+                "info": "no need file"
+            }
         if os.path.exists("./project/" + project_name):
             return {
                 "result": "fail",
                 "info": "such project exists"
             }
-        f = request.files["file"]
-        if f.filename.find(".zip") < 0:
-            return {
-                "result": "fail",
-                "info": "no need file"
-            }
+
         os.makedirs("./project/" + project_name)
         print(f.filename)
         project_path = "./project/" + project_name
@@ -233,9 +234,9 @@ def run_project():
                 if not os.path.exists("./project"):
                     os.chdir("../")
             print(info)
-            if info['jobid'] is not None:
+            if info is not None:
                 item = eval(r.hget("project", name))
-                item['job_id'] = info['jobid']
+                item['job_id'] = info
                 r.hset("project", name, str(item))
                 save_run_time(name)
                 return {
